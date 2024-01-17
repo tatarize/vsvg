@@ -88,20 +88,12 @@ impl PartialOrd<Self> for Point {
 
 impl Ord for Point {
     fn cmp(&self, other: &Self) -> Ordering {
-        if other == self {
-            return Ordering::Equal;
+        let x_eq = (self.x - other.x).abs() < 1e-12;
+        if x_eq {
+            if (self.y - other.y).abs() < 1e-12 { return Ordering::Equal; }
+            return f64::partial_cmp(&self.y, &other.y).expect("No NaNs");
         }
-        if other.x < self.x {
-            return Ordering::Greater;
-        } else if other.x > self.x {
-            return Ordering::Less;
-        }
-        if other.y < self.y {
-            return Ordering::Greater;
-        } else if other.y > self.y {
-            return Ordering::Less;
-        }
-        return Ordering::Equal;
+        f64::partial_cmp(&self.x, &other.x).expect("No NaNs")
     }
 }
 
@@ -689,6 +681,7 @@ impl App for WhiskersDemoSketch {
         // line width and color
         // let mut new_doc = vsvg::Document::default();
 
+        let mut doc = vsvg::Document::default();
         let layer = doc.get_mut(1);
         for line in geom.segments {
             layer.line(line.0 .0, line.0 .1, line.4 .0, line.4 .1);
@@ -701,7 +694,7 @@ impl App for WhiskersDemoSketch {
                 path.metadata_mut().color = vsvg::Color::LIGHT_RED;
             });
         });
-        // *doc = new_doc;
+        *sketch.document_mut() = doc;
 
         Ok(())
     }
