@@ -2,7 +2,6 @@
 //! using whiskers.
 
 use itertools::iproduct;
-use whiskers::prelude::*;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 use std::ops::{BitAnd, BitOr, Not};
@@ -344,12 +343,16 @@ impl BeamTable {
                 let above_space = inside[j][k + 1];
                 if (below_space && !above_space) || (!below_space && above_space) {
                     //is a boundary.
-                    let start =
-                        self.geometry
-                            .y_intercept(segment_active as usize, left_event.x, left_event.y);
-                    let end =
-                        self.geometry
-                            .y_intercept(segment_active as usize, right_event.x, right_event.y);
+                    let start = self.geometry.y_intercept(
+                        segment_active as usize,
+                        left_event.x,
+                        left_event.y,
+                    );
+                    let end = self.geometry.y_intercept(
+                        segment_active as usize,
+                        right_event.x,
+                        right_event.y,
+                    );
                     let line = &self.geometry.segments[segment_active as usize];
                     g.line((start.x, start.y), (end.x, end.y), line.2 .1);
                 }
