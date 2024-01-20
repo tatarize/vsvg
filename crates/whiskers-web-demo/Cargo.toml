@@ -13,7 +13,7 @@ publish = false
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-#vsvg = { git = "https://github.com/abey79/vsvg", rev = "86ac544d0c049b3018d6f0a56611965886f0d461" }
 whiskers = { workspace = true, features = ["viewer"] }
 vsvg.workspace = true
 itertools.workspace = true
+beamtable = { path ="../../../beamtable" }
